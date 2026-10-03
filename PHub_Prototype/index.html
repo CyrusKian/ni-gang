@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHub - Urdaneta Sacred Heart Hospital</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-container" class="login-wrapper">
+        <div class="login-card">
+            <h2>Urdaneta Sacred Heart Hospital</h2>
+            <h3>PHub: Patient Room Management System</h3>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Enter username (e.g., headnurse)">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Enter password">
+                </div>
+                <div id="login-error" class="error-msg"></div>
+                <button type="submit" class="btn primary-btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard-container" class="dashboard-wrapper hidden">
+        <header class="main-header">
+            <div class="header-title">
+                <h1>PHub Hospital Dashboard</h1>
+                <span id="user-role-badge" class="badge">Role: Nurse</span>
+            </div>
+            <button id="logout-btn" class="btn danger-btn">Logout</button>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-target="rooms-tab">Manage Rooms</button>
+            <button class="tab-btn" data-target="patients-tab">Manage Patients</button>
+            <button class="tab-btn" data-target="staff-tab">Manage Staff</button>
+            <button class="tab-btn" data-target="cleaning-tab">Cleaning Schedule</button>
+        </nav>
+
+        <main class="tab-content-container">
+            
+            <!-- ROOMS TAB -->
+            <section id="rooms-tab" class="tab-pane active">
+                <h2>Room Information & Availability</h2>
+                <div class="table-responsive">
+                    <table id="rooms-table">
+                        <thead>
+                            <tr>
+                                <th>Room No.</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Assigned Patient</th>
+                                <th>Assigned Staff</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PATIENTS TAB -->
+            <section id="patients-tab" class="tab-pane">
+                <h2>Patient Admission & Discharge</h2>
+                <div class="card admission-card">
+                    <h3>Admit New Patient</h3>
+                    <form id="admission-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Patient Full Name</label>
+                                <input type="text" id="patient-name" required placeholder="Full Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Assign Available Room</label>
+                                <select id="available-rooms-select" required>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn primary-btn">Admit Patient & Update Room</button>
+                    </form>
+                </div>
+
+                <h3>Current Admitted Patients</h3>
+                <div class="table-responsive">
+                    <table id="patients-table">
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>Room No.</th>
+                                <th>Admission Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- STAFF TAB -->
+            <section id="staff-tab" class="tab-pane">
+                <h2>Staff & Room Assignments</h2>
+                <div class="card">
+                    <h3>Assign Staff to Room</h3>
+                    <form id="staff-assignment-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Select Role</label>
+                                <select id="staff-role-select">
+                                    <option value="Doctor">Doctor</option>
+                                    <option value="Nurse">Nurse</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Staff Name</label>
+                                <input type="text" id="staff-name" required placeholder="Staff Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Select Room</label>
+                                <select id="staff-room-select" required>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn primary-btn">Save Assignment</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- CLEANING SCHEDULE TAB -->
+            <section id="cleaning-tab" class="tab-pane">
+                <h2>Google Calendar API Integration (Cleaning Schedule)</h2>
+                <p class="section-desc">Automated cleaning tasks triggered upon patient discharge.</p>
+                <div class="table-responsive">
+                    <table id="cleaning-table">
+                        <thead>
+                            <tr>
+                                <th>Room No.</th>
+                                <th>Scheduled Cleaning Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ROOM UPDATE MODAL -->
+    <div id="room-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Update Room Details</h3>
+            <form id="room-update-form">
+                <input type="hidden" id="modal-room-id">
+                <div class="form-group">
+                    <label>Room Number</label>
+                    <input type="text" id="modal-room-no" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Room Status</label>
+                    <select id="modal-room-status">
+                        <option value="Available">Available</option>
+                        <option value="Occupied">Occupied</option>
+                        <option value="Cleaning">Cleaning</option>
+                        <option value="Maintenance">Maintenance</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="close-modal-btn" class="btn secondary-btn">Cancel</button>
+                    <button type="submit" class="btn primary-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
